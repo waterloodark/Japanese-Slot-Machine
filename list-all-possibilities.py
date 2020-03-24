@@ -1,87 +1,91 @@
-p_free = 1/7.3
-p_hand = 0.1634
-p_rb = 1/315
-p_bb = 1/259
-p_blank = 1 - p_free - p_hand - p_rb - p_bb
-payout_hand = 8
-payout_rb = 8
-payout_bb = 15
-slotin_free = 0
-slotin_lottary = 3
-slotin_bonus_regular = 3
-slotin_bonus_big = 3
-state_lottary = [0, 2, 11, 26]
-state_free = [1]
-P = [[p_blank, p_free, p_hand, p_rb, 0, 0, 0, 0, 0, 0, 0, p_bb, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [p_blank, p_free, p_hand, p_rb, 0, 0, 0, 0, 0, 0, 0, p_bb, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [p_blank, p_free, p_hand, p_rb, 0, 0, 0, 0, 0, 0, 0, p_bb, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [p_blank, p_free, p_hand, p_rb, 0, 0, 0, 0, 0, 0, 0, p_bb, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-     [p_blank, p_free, p_hand, p_rb, 0, 0, 0, 0, 0, 0, 0, p_bb, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
-print(len(P))
-#for i in range(len(P)):                                                                                                                
-#    print(len(P[i]))                                                                                                                   
-s = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-states = {(0, 0): 1}
+p_replay = 1.0/7.3
+p_win = 0.1822
+p_bonus_big = 1.0/200.0
+p_bonus_regular = 0
+slotin_lottery = 3
+payout_win  = 8
+slotin_bonus_big = 1
+payout_bonus_big  = 15
+n_bonus_big = 20
+n_bonus_regular = 0
+p_lose = 1 - p_replay - p_win - p_bonus_regular - p_bonus_big
+pv_lot = [p_lose, p_replay, p_win]
+pv_lot = pv_lot + [p_bonus_big] + [0]*(n_bonus_big-1)
+print(pv_lot)
+print(sum(pv_lot))
+pv_bb = []
+for i in range(4,23):
+    pv_bb.append( [0]*i + [1] + [0]*(22-i) )
+pv_bb.append( [1] + [0] * 22)
+P = [pv_lot, pv_lot, pv_lot]
+P.extend(pv_bb)
+
+#payout_rb = payout_bonus_regular                                                                                                       
+payout_bb = payout_bonus_big
+
+states = {(0, 0, 0): 1}
 
 import datetime as dt
 
+
 timestamp_1 = dt.datetime.now()
-for i in range(6000):
-    states_new = {}
-    for state in list(states.keys()):
-        p_vec = P[state[0]]
-        for i in range(len(p_vec)):
-            if p_vec[i] > 0:
-                if i is 1:
-                    slot_in = 0
-                else:
-                    slot_in = 3
-                if i is 2:
-                    pay_out = payout_hand
-                elif i in range(3,10):
-                    pay_out = payout_rb
-                    state_next = (i + 1, state[1] - slot_in + pay_out)
-                elif i is 10:
-                    pay_out = payout_rb
-                    state_next = (0, state[1] - slot_in + pay_out)
-                elif i in range(11,25):
-                    pay_out = payout_bb
-                    state_next = (i + 1, state[1] - slot_in + pay_out)
-                elif i is 25:
-                    pay_out = payout_bb
-                    state_next = (0, state[1] - slot_in + pay_out)
-                else:
-                    pay_out = 0
-                    state_next = (0, state[1] - slot_in + pay_out)
-                if state_next in states_new.keys():
-                    states_new[state_next] += states[state] * p_vec[i]
-                else:
-                    states_new[state_next] = states[state] * p_vec[i]
-    states = states_new
-timestamp_2 = dt.datetime.now()
-# print(states)                                                                                                                         
 print(timestamp_1)
+for i in range(400):
+    states_new = {}
+    #print(list(states.keys()))                                                                                                         
+    for state in list(states.keys()):
+        i = state[0]
+        p_vec = P[state[0]]
+        p = states[state]
+        if i is 0 or i is 2:
+            slot_in = slotin_lottery
+            states_n = [[0, state[1] + slot_in, state[2], p_vec[0]],
+                        [1, state[1] + slot_in, state[2], p_vec[1]],
+                        [0, state[1] + slot_in, state[2] + payout_win, p_vec[2]],
+                        [3, state[1] + slot_in, state[2], p_vec[3]]]
+        elif i is 1:
+            slot_in = 0
+            states_n = [[0, state[1], state[2], p_vec[0]],
+                        [1, state[1], state[2], p_vec[1]],
+            states_n = [[0, state[1], state[2], p_vec[0]],
+                        [1, state[1], state[2], p_vec[1]],
+                        [0, state[1], state[2] + payout_win, p_vec[2]],
+                        [3, state[1], state[2], p_vec[3]]]
+        elif i in range(3,22):
+            slot_in = slotin_bonus_big
+            pay_out = payout_bb
+            states_n = [[i + 1, state[1] + slot_in, state[2] + payout_bonus_big, 1]]
+        elif i is 22:
+            slot_in = slotin_bonus_big
+            pay_out = payout_bb
+            states_n = [[0, state[1] + slot_in, state[2] + payout_bonus_big, 1]]
+        else:
+            print("ERROR!")
+            print(i)
+        for s in states_n:
+            state_tmp = (s[0], s[1], s[2])
+            pp = s[3]
+            if state_tmp in states_new.keys():
+                states_new[state_tmp] += p * pp
+            else:
+                states_new[state_tmp] = p * pp
+    states = states_new
+    #print(states)                                                                                                                      
+
+timestamp_2 = dt.datetime.now()
 print(timestamp_2)
 print(timestamp_2 - timestamp_1)
 print(len(states))
+
+slotin_mean = sum([key[1]*states[key] for key in list(states.keys())])
+payout_mean = sum([key[2]*states[key] for key in list(states.keys())])
+
+print(slotin_mean)
+print(payout_mean)
+print(payout_mean / slotin_mean)
+
+
+import csv
+with open('states-100-1.csv', 'w') as f:
+    writer = csv.writer(f)
+    writer.writerows([[key[0], key[1], states[key]] for key in list(states.keys())])
