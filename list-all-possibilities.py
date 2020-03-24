@@ -132,6 +132,7 @@ class SlotMachine:
                 
         self.states = states_new
 
+
 timestamp_begin = dt.datetime.now()
 m = SlotMachine()
 if sys.argv[1] == '1':
@@ -149,12 +150,14 @@ m.initialize()
 timestamp_begin = dt.datetime.now()
 epoch = [[0,0]]
 print([dt.datetime.now(), 0, 0])
+
+epoch_report = [400, 1600, 6000, 17500]
 for i in range(1600):
     m.update()
     # epoch.append([(dt.datetime.now()-timestamp_begin).total_seconds(), len(m.states)])
     if (i + 1) % 10 == 0:
         print([dt.datetime.now(), i + 1, len(m.states)])
-    if i + 1 == 400:
+    if i + 1 in epoch_report
         print(len(m.states))
         print(sum(m.states.values()))
         timestamp_end = dt.datetime.now()
@@ -171,45 +174,7 @@ for i in range(1600):
         print(['pay_out', payout_mean])
         print(['rate', s_p_rate_mean])
 
-        if sys.argv[1] == '1':
-            with open('1-400-states.csv', 'w') as f:
-                writer = csv.writer(f)
-                writer.writerows([[key[0], key[2], m.states[key]] for key in list(m.states.keys())])
-        elif sys.argv[1] == '2':
-            with open('2-400-states.csv', 'w') as f:
-                writer = csv.writer(f)
-                writer.writerows([[key[0], key[2], m.states[key]] for key in list(m.states.keys())])
-        else:
-            with open('3-400-states.csv', 'w') as f:
-                writer = csv.writer(f)
-                writer.writerows([[key[0], key[2], m.states[key]] for key in list(m.states.keys())])
-
-    if i + 1 == 1600:
-        print(len(m.states))
-        print(sum(m.states.values()))
-        timestamp_end = dt.datetime.now()
-        print(timestamp_end - timestamp_begin)
-
-        # for s in m.states:
-        #    print(s)
-
-        slotin_mean = sum([key[0] * m.states[key] for key in list(m.states.keys())])
-        payout_mean = sum([key[2] * m.states[key] for key in list(m.states.keys())])
-        s_p_rate_mean = sum([key[2] / key[0] * m.states[key] for key in list(m.states.keys())])
-
-        print(['slot_in', slotin_mean])
-        print(['pay_out', payout_mean])
-        print(['rate', s_p_rate_mean])
-
-        if sys.argv[1] == '1':
-            with open('1-1600-states.csv', 'w') as f:
-                writer = csv.writer(f)
-                writer.writerows([[key[0], key[2], m.states[key]] for key in list(m.states.keys())])
-        elif sys.argv[1] == '2':
-            with open('2-1600-states.csv', 'w') as f:
-                writer = csv.writer(f)
-                writer.writerows([[key[0], key[2], m.states[key]] for key in list(m.states.keys())])
-        else:
-            with open('3-1600-states.csv', 'w') as f:
-                writer = csv.writer(f)
-                writer.writerows([[key[0], key[2], m.states[key]] for key in list(m.states.keys())])
+        filename = sys.argv[1] + '-' + str(i+1) + '-states.csv'
+        with open(filename, 'w') as f:
+            writer = csv.writer(f)
+            writer.writerows([[key[0], key[2], m.states[key]] for key in list(m.states.keys())])
