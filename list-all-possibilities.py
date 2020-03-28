@@ -133,48 +133,53 @@ class SlotMachine:
         self.states = states_new
 
 
-timestamp_begin = dt.datetime.now()
-m = SlotMachine()
-if sys.argv[1] == '1':
-    m.configure(1)
-elif sys.argv[1] == '2':
-    m.configure(2)
-else:
-    m.configure(3)
-for i in range(len(m.P)):
-    print(m.P[i])
-print([len(m.P), [len(m.P[i]) for i in range(len(m.P))]])
-print(m.slotin)
-print(m.payout)
-m.initialize()
-timestamp_begin = dt.datetime.now()
-epoch = [[0,0]]
-print([dt.datetime.now(), 0, 0])
+def main():
+    timestamp_begin = dt.datetime.now()
+    m = SlotMachine()
+    if sys.argv[1] == '1':
+        m.configure(1)
+    elif sys.argv[1] == '2':
+        m.configure(2)
+    else:
+        m.configure(3)
+    for i in range(len(m.P)):
+        print(m.P[i])
+    print([len(m.P), [len(m.P[i]) for i in range(len(m.P))]])
+    print(m.slotin)
+    print(m.payout)
+    m.initialize()
+    timestamp_begin = dt.datetime.now()
+    epoch = [[0, 0]]
+    print([dt.datetime.now(), 0, 0])
 
-epoch_report = [400, 1600, 6000, 17500]
-for i in range(1600):
-    m.update()
-    # epoch.append([(dt.datetime.now()-timestamp_begin).total_seconds(), len(m.states)])
-    if (i + 1) % 10 == 0:
-        print([dt.datetime.now(), i + 1, len(m.states)])
-    if i + 1 in epoch_report
-        print(len(m.states))
-        print(sum(m.states.values()))
-        timestamp_end = dt.datetime.now()
-        print(timestamp_end - timestamp_begin)
+    epoch_report = [400, 1600, 6000, 17500]
+    for i in range(1600):
+        m.update()
+        # epoch.append([(dt.datetime.now()-timestamp_begin).total_seconds(), len(m.states)])
+        if (i + 1) % 10 == 0:
+            print([dt.datetime.now(), i + 1, len(m.states)])
+        if i + 1 in epoch_report
+            print(len(m.states))
+            print(sum(m.states.values()))
+            timestamp_end = dt.datetime.now()
+            print(timestamp_end - timestamp_begin)
 
-        # for s in m.states:
-        #    print(s)
+            # for s in m.states:
+            #    print(s)
 
-        slotin_mean = sum([key[0] * m.states[key] for key in list(m.states.keys())])
-        payout_mean = sum([key[2] * m.states[key] for key in list(m.states.keys())])
-        s_p_rate_mean = sum([key[2] / key[0] * m.states[key] for key in list(m.states.keys())])
+            slotin_mean = sum([key[0] * m.states[key] for key in list(m.states.keys())])
+            payout_mean = sum([key[2] * m.states[key] for key in list(m.states.keys())])
+            s_p_rate_mean = sum([key[2] / key[0] * m.states[key] for key in list(m.states.keys())])
 
-        print(['slot_in', slotin_mean])
-        print(['pay_out', payout_mean])
-        print(['rate', s_p_rate_mean])
+            print(['slot_in', slotin_mean])
+            print(['pay_out', payout_mean])
+            print(['rate', s_p_rate_mean])
 
-        filename = sys.argv[1] + '-' + str(i+1) + '-states.csv'
-        with open(filename, 'w') as f:
-            writer = csv.writer(f)
-            writer.writerows([[key[0], key[2], m.states[key]] for key in list(m.states.keys())])
+            filename = sys.argv[1] + '-' + str(i + 1) + '-states.csv'
+            with open(filename, 'w') as f:
+                writer = csv.writer(f)
+                writer.writerows([[key[0], key[2], m.states[key]] for key in list(m.states.keys())])
+
+
+if __name__ == '__main__':
+    main()
