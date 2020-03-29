@@ -158,7 +158,7 @@ def main():
         # epoch.append([(dt.datetime.now()-timestamp_begin).total_seconds(), len(m.states)])
         if (i + 1) % 10 == 0:
             print([dt.datetime.now(), i + 1, len(m.states)])
-        if i + 1 in epoch_report
+        if i + 1 in epoch_report:
             print(len(m.states))
             print(sum(m.states.values()))
             timestamp_end = dt.datetime.now()
