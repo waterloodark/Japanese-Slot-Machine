@@ -1,12 +1,12 @@
 import datetime as dt
 import csv
 import sys
-#import matplotlib.pyplot as plt
 
 
 class SlotMachine:
     def __init__(self):
-        self.P = None
+        self.P = None  # Transition probability matrix
+        self.n_state = None  # Number of states
 
     def model_type_a(self, pr, r, slotin, payout):
         pr_lose, pr_win, pr_replay, pr_bb, pr_rb = pr
@@ -18,7 +18,6 @@ class SlotMachine:
             p_lottery = p_lottery + [pr_bb] + [0] * (r_bb)
         if r_rb > 0:
             p_lottery = p_lottery + [pr_rb] + [0] * (r_rb)
-        self.P = []
         self.P = [p_lottery, p_lottery, p_lottery]
         if r_bb > 0:
             p_bb = []
@@ -47,7 +46,7 @@ class SlotMachine:
                                 [1] + [0] * (r_rb - i - 1))
             self.P = self.P + p_rb + [p_lottery]
 
-        # 状態数
+        # number of states
         self.n_state = 1 + 1 + 1 + 1 + r_bb + 1 + r_rb
 
         # 払い出しメダル数
