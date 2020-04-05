@@ -49,14 +49,14 @@ class SlotMachine:
         # number of states
         self.n_state = 1 + 1 + 1 + 1 + r_bb + 1 + r_rb
 
-        # 払い出しメダル数
+        # Number of medals to receive as pay out
         self.payout = [0, payout_win, 0]
         if r_bb > 0:
             self.payout = self.payout + [0] + [payout_bb] * r_bb
         if r_rb > 0:
             self.payout = self.payout + [0] + [payout_rb] * r_rb
 
-        # 投入メダル数
+        # Number of medals to slot in
         self.slotin = [slotin_lottery] * 2 + [0] + \
                       [slotin_bb] * (r_bb + 1) + [slotin_rb] * (r_rb + 1)
 
