@@ -1,7 +1,7 @@
 import datetime as dt
 import csv
 import sys
-import matplotlib.pyplot as plt
+
 
 class SlotMachine:
     def __init__(self):
@@ -123,30 +123,35 @@ class SlotMachine:
                           [slotin_lottery, slotin_bb, slotin_rb],
                           [payout_win, payout_bb, payout_rb])
 
-    def initialize(self):
-        # {(total slotin, state, total payout): probability}
-        self.states = {(0, 0, 0): 1}
+    def initialize(self, version=1):
+        if version == 1:
+            # {(total slotin, state, total payout): probability}
+            self.states = {(0, 0, 0): 1}
+        if version == 2:
+            # {(regular slotin, bonus slotin, state, regular payout, bonus payout): probability}
+            self.states = {(0, 0, 0, 0, 0): 1}
 
 
-    def update(self):
-        states_new = {}
-        for s in list(self.states.keys()):
-            p_trans = self.P[s[1]]
-            pr = self.states[s]
-            slot_in = self.slotin[s[1]]
-            for k in range(len(p_trans)):
-                if p_trans[k]>0:
-                    s_new = (s[0] + slot_in, k, s[2] + self.payout[k])
-                    pp = p_trans[k]
-                    if s_new in states_new.keys():
-                        states_new[s_new] += pr * pp
-                    else:
-                        states_new[s_new] = pr * pp
-                
+    def update(self, version=1):
+        if version == 1:
+            states_new = {}
+            for s in list(self.states.keys()):
+                p_trans = self.P[s[1]]
+                pr = self.states[s]
+                slot_in = self.slotin[s[1]]
+                for k in range(len(p_trans)):
+                    if p_trans[k]>0:
+                        s_new = (s[0] + slot_in, k, s[2] + self.payout[k])
+                        pp = p_trans[k]
+                        if s_new in states_new.keys():
+                            states_new[s_new] += pr * pp
+                        else:
+                            states_new[s_new] = pr * pp
+
         self.states = states_new
 
 
-def test():
+def test(version=1):
     timestamp_begin = dt.datetime.now()
     m = SlotMachine()
     m.configure(3)
@@ -155,14 +160,14 @@ def test():
     print([len(m.P), [len(m.P[i]) for i in range(len(m.P))]])
     print(m.slotin)
     print(m.payout)
-    m.initialize()
+    m.initialize(1)
     timestamp_begin = dt.datetime.now()
     epoch = [[0, 0]]
     print([dt.datetime.now(), 0, 0])
 
     epoch_report = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     for i in range(101):
-        m.update()
+        m.update(1)
         epoch.append([(dt.datetime.now()-timestamp_begin).total_seconds(), len(m.states)])
         if (i + 1) % 10 == 0:
             print([dt.datetime.now(), i + 1, len(m.states)])
@@ -172,12 +177,10 @@ def test():
             timestamp_end = dt.datetime.now()
             print(timestamp_end - timestamp_begin)
 
-            # for s in m.states:
-            #    print(s)
-
-            slotin_mean = sum([key[0] * m.states[key] for key in list(m.states.keys())])
-            payout_mean = sum([key[2] * m.states[key] for key in list(m.states.keys())])
-            s_p_rate_mean = sum([key[2] / key[0] * m.states[key] for key in list(m.states.keys())])
+            if version == 1:
+                slotin_mean = sum([key[0] * m.states[key] for key in list(m.states.keys())])
+                payout_mean = sum([key[2] * m.states[key] for key in list(m.states.keys())])
+                s_p_rate_mean = sum([key[2] / key[0] * m.states[key] for key in list(m.states.keys())])
 
             print(['slot_in', slotin_mean])
             print(['pay_out', payout_mean])
@@ -208,7 +211,7 @@ def main():
     epoch_report = [400, 1600, 6000, 17500]
     for i in range(1600):
         m.update()
-        # epoch.append([(dt.datetime.now()-timestamp_begin).total_seconds(), len(m.states)])
+        epoch.append([(dt.datetime.now()-timestamp_begin).total_seconds(), len(m.states)])
         if (i + 1) % 10 == 0:
             print([dt.datetime.now(), i + 1, len(m.states)])
         if i + 1 in epoch_report:
@@ -216,9 +219,6 @@ def main():
             print(sum(m.states.values()))
             timestamp_end = dt.datetime.now()
             print(timestamp_end - timestamp_begin)
-
-            # for s in m.states:
-            #    print(s)
 
             slotin_mean = sum([key[0] * m.states[key] for key in list(m.states.keys())])
             payout_mean = sum([key[2] * m.states[key] for key in list(m.states.keys())])
@@ -235,4 +235,5 @@ def main():
 
 
 if __name__ == '__main__':
-    test()
+    main()
+    # test(1)
