@@ -1,7 +1,7 @@
 import datetime as dt
 import csv
 import sys
-
+import matplotlib.pyplot as plt
 
 class SlotMachine:
     def __init__(self):
@@ -61,58 +61,72 @@ class SlotMachine:
                       [slotin_bb] * (r_bb + 1) + [slotin_rb] * (r_rb + 1)
 
     def configure(self, model):
-        if model == 1:
-            pr_replay = 1.0/7.3  # 再遊技発生確率
-            pr_win = 0.1822  # 入賞確率
-            pr_bb = 1.0/200.0  # BB当選確率
-            pr_rb = 0.0  # RB当選確率
-
-            slotin_lottery = 3  # メダル投入数 （抽選)
-            payout_win = 8  # メダル払い出し数 (入賞)
-            r_bb = 20  # BB繰り返し数
-            slotin_bb = 1  # メダル投入数 (BB)
-            payout_bb = 15  # メダル払い出し数 (BB)
-            r_rb = 0  # RB繰り返し数
-            slotin_rb = 1  # メダル投入数 (RB)
-            payout_rb = 15  # メダル払い出し数 (RB)
+        if model == 1:  # A model for testing
+            # Probability of having replay
+            pr_replay = 1.0/7.3
+            # Probability of winning a normal prize
+            pr_win = 0.1822
+            # Probability of winning a BB
+            pr_bb = 1.0/200.0
+            # Probability of Winning RB
+            pr_rb = 0.0
+            # Number of medals to slot in for a lottery
+            slotin_lottery = 3
+            # Number of medals to receive as pay out for a normal prize
+            payout_win = 8
+            # The number of times for which BB occurs repeatedly
+            r_bb = 20
+            # Number of medals to slot in under BB
+            slotin_bb = 1
+            # Number of medals to receive as pay out for BB
+            payout_bb = 15
+            # The number of times for which RB occurs repeatedly
+            r_rb = 0
+            # Number of medals to slot in under RB
+            slotin_rb = 1
+            # Number of medals to receive as pay out for RB
+            payout_rb = 15
 
         elif model == 2:
-            pr_replay = 1.0/7.3  # 再遊技発生確率
-            pr_win = 0.1614  # 入賞確率
-            pr_bb = 1.0/250.0  # BB当選確率
-            pr_rb = 1.0/250.0  # RB当選確率
+            pr_replay = 1.0/7.3
+            pr_win = 0.1614
+            pr_bb = 1.0/250.0
+            pr_rb = 1.0/250.0
 
-            slotin_lottery = 3  # メダル投入数 （抽選)
-            payout_win = 8  # メダル払い出し数 (入賞)
-            r_bb = 20  # BB繰り返し数
-            slotin_bb = 1  # メダル投入数 (BB)
-            payout_bb = 15  # メダル払い出し数 (BB)
-            r_rb = 8  # RB繰り返し数
-            slotin_rb = 1  # メダル投入数 (RB)
-            payout_rb = 15  # メダル払い出し数 (RB)
+            slotin_lottery = 3
+            payout_win = 8
+            r_bb = 20
+            slotin_bb = 1
+            payout_bb = 15
+            r_rb = 8
+            slotin_rb = 1
+            payout_rb = 15
         elif model == 3:
-            pr_replay = 1.0/7.3  # 再遊技発生確率
-            pr_win = 0.1724  # 入賞確率
-            pr_bb = 1.0/250.0  # BB当選確率
-            pr_rb = 1.0/250.0  # RB当選確率
+            pr_replay = 1.0/7.3
+            pr_win = 0.1724
+            pr_bb = 1.0/250.0
+            pr_rb = 1.0/250.0
  
-            slotin_lottery = 3  # メダル投入数 （抽選)
-            payout_win = 8  # メダル払い出し数 (入賞)
-            r_bb = 21  # BB繰り返し数
-            slotin_bb = 2  # メダル投入数 (BB)
-            payout_bb = 14  # メダル払い出し数 (BB)
-            r_rb = 8  # RB繰り返し数
-            slotin_rb = 2  # メダル投入数 (RB)
-            payout_rb = 14  # メダル払い出し数 (RB)
+            slotin_lottery = 3
+            payout_win = 8
+            r_bb = 21
+            slotin_bb = 2
+            payout_bb = 14
+            r_rb = 8
+            slotin_rb = 2
+            payout_rb = 14
 
-        pr_lose = 1.0 - pr_replay - pr_win - pr_rb - pr_bb  # 外れ確率
+        # Probability to lose for a lottery
+        pr_lose = 1.0 - pr_replay - pr_win - pr_rb - pr_bb
         self.model_type_a([pr_lose, pr_win, pr_replay, pr_bb, pr_rb],
                           [r_bb, r_rb], 
                           [slotin_lottery, slotin_bb, slotin_rb],
                           [payout_win, payout_bb, payout_rb])
 
     def initialize(self):
+        # {(total slotin, state, total payout): probability}
         self.states = {(0, 0, 0): 1}
+
 
     def update(self):
         states_new = {}
@@ -130,6 +144,46 @@ class SlotMachine:
                         states_new[s_new] = pr * pp
                 
         self.states = states_new
+
+
+def test():
+    timestamp_begin = dt.datetime.now()
+    m = SlotMachine()
+    m.configure(3)
+    for i in range(len(m.P)):
+        print(m.P[i])
+    print([len(m.P), [len(m.P[i]) for i in range(len(m.P))]])
+    print(m.slotin)
+    print(m.payout)
+    m.initialize()
+    timestamp_begin = dt.datetime.now()
+    epoch = [[0, 0]]
+    print([dt.datetime.now(), 0, 0])
+
+    epoch_report = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+    for i in range(101):
+        m.update()
+        epoch.append([(dt.datetime.now()-timestamp_begin).total_seconds(), len(m.states)])
+        if (i + 1) % 10 == 0:
+            print([dt.datetime.now(), i + 1, len(m.states)])
+        if i + 1 in epoch_report:
+            print(len(m.states))
+            print(sum(m.states.values()))
+            timestamp_end = dt.datetime.now()
+            print(timestamp_end - timestamp_begin)
+
+            # for s in m.states:
+            #    print(s)
+
+            slotin_mean = sum([key[0] * m.states[key] for key in list(m.states.keys())])
+            payout_mean = sum([key[2] * m.states[key] for key in list(m.states.keys())])
+            s_p_rate_mean = sum([key[2] / key[0] * m.states[key] for key in list(m.states.keys())])
+
+            print(['slot_in', slotin_mean])
+            print(['pay_out', payout_mean])
+            print(['rate', s_p_rate_mean])
+
+    print([epoch[i][1] for i in range(len(epoch))])
 
 
 def main():
@@ -181,4 +235,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    test()
